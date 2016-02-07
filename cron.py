@@ -22,13 +22,13 @@ def downloadPage():
 		last_update_date=response_headers["date"].strip()
 		if stats['lastUpdated']!=last_update_date:
 			log.put("New version available","INFO")
-			return True
+			return True,html_data,last_update_date
 		else:
 			log.put("New version not available","INFO")
-			return False
+			return False,None,None
 	except Exception as e:
 			log.put("Index page failed to download","FAIL")
-			return False
+			return False,None,None
 def check():
 	loadStats()
 	return downloadPage()

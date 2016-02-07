@@ -1,3 +1,14 @@
 {
-	"base_url":"http://downloads.dbpedia.org/current/core-i18n/en/"
+	"base_url":"http://downloads.dbpedia.org/current/core-i18n/en/",
+	"tracking_files":[
+		"article-categories_en.nt.bz2",
+		"disambiguations_en.nt.bz2",
+		"external-links_en.nt.bz2",
+		"homepages_en.nt.bz2",
+		"images_en.nt.bz2",
+		"infobox-properties_en.nt.bz2",
+		"instance-types_en.nt.bz2",
+	]
+
+	
 }
