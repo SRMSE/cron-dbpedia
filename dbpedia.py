@@ -1,7 +1,45 @@
 import log,config
 import sys,cron,json
 from bs4 import BeautifulSoup as bs
+import os
+from urllib2 import urlopen, URLError, HTTPError
 
+def dlfile(url):
+    # Open the url
+    try:
+        f = urlopen(url)
+        print "downloading " + url
+
+        # Open our local file for writing
+        with open(os.path.basename(url), "wb") as local_file:
+            local_file.write(f.read())
+        log.put("Download success "+url,"SUCCESS")
+        log.put("Starting decompressing","INFO")
+        os.system("bunzip2 -d "+os.path.basename(url))
+        log.put("File decompressed "+url,"SUCCESS")
+
+    #handle errors
+    except HTTPError, e:
+        print "HTTP Error:", e.code, url
+        log.put("Download failed "+url,"ERROR")
+    except URLError, e:
+        print "URL Error:", e.reason, url
+        log.put("Download failed "+url,"ERROR")
+
+def updateFiles(dic):
+	log.put("Downloading tracked files","INFO")
+	li=config.getConfig("tracking_files") #list of files to be updated
+	for l in li:
+		try:
+			if(cron.stats["files"][l]!=dic[l]):
+				#file changed
+				dlfile(config.getConfig("base_url")+l)
+			log.put("Tracked files updated","SUCCESS")
+			log.put("Deleting all files from cache","INFO")
+			os.system("rm -rf *.nt")
+			log.put("Files deleted from cache","SUCCESS")
+		except KeyError:
+				dlfile(config.getConfig("base_url")+l)
 
 def parseIndex(data):
 	log.put("Start parsing index","INFO")
@@ -24,6 +62,7 @@ def init():
 		dic=parseIndex(data)#fetch json of data
 		if dic is None:
 			sys.exit(0)
+		updateFiles(dic)
 		stats={}
 		stats['lastUpdated']=update_date.strip()
 		stats["files"]={}
@@ -35,6 +74,8 @@ def init():
 			log.put("Stats updated","SUCCESS")
 		except:
 			log.put("Cannot update stats","FAIL")
+		
+
 	else:
 		#No change exit silently
 		sys.exit(0)
