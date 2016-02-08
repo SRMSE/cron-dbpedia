@@ -3,7 +3,7 @@ import sys,cron,json
 from bs4 import BeautifulSoup as bs
 import os
 from urllib2 import urlopen, URLError, HTTPError
-
+import ntriples as nt
 def dlfile(url):
     # Open the url
     try:
@@ -17,7 +17,7 @@ def dlfile(url):
         log.put("Starting decompressing","INFO")
         os.system("bunzip2 -d "+os.path.basename(url))
         log.put("File decompressed "+url,"SUCCESS")
-
+        print "yoo"
     #handle errors
     except HTTPError, e:
         print "HTTP Error:", e.code, url
@@ -34,13 +34,18 @@ def updateFiles(dic):
 			if(cron.stats["files"][l]!=dic[l]):
 				#file changed
 				dlfile(config.getConfig("base_url")+l)
-			log.put("Tracked files updated","SUCCESS")
-			log.put("Deleting all files from cache","INFO")
-			os.system("rm -rf *.nt")
-			log.put("Files deleted from cache","SUCCESS")
+				log.put("Parsing "+config.getConfig("base_url")+l,"INFO")
+				nt.parseURI(l.replace(".bz2",""),l.split(".")[0])
+				log.put("Parsed "+config.getConfig("base_url")+l,"SUCCESS")
 		except KeyError:
 				dlfile(config.getConfig("base_url")+l)
-
+				log.put("Parsing "+config.getConfig("base_url")+l,"INFO")
+				nt.parseURI(l.replace(".bz2",""),l.split(".")[0])
+				log.put("Parsed "+config.getConfig("base_url")+l,"SUCCESS")
+	log.put("Tracked files updated","SUCCESS")
+	log.put("Deleting all files from cache","INFO")
+	os.system("rm -rf *.nt")
+	log.put("Files deleted from cache","SUCCESS")
 def parseIndex(data):
 	log.put("Start parsing index","INFO")
 	soup=bs(data)
@@ -67,15 +72,19 @@ def init():
 		stats['lastUpdated']=update_date.strip()
 		stats["files"]={}
 		for key in dic:
-			stats["files"][key]=dic[key].strip()
-		del stats["files"]["../"] #remove parent index
+			if key in config.getConfig("tracking_files"):
+				stats["files"][key]=dic[key].strip()
+		try:
+			del stats["files"]["../"] #remove parent index
+		except KeyError:
+			pass
 		try:
 			open("stats.json","w").write(json.dumps(stats, indent=4, sort_keys=True))
 			log.put("Stats updated","SUCCESS")
 		except:
 			log.put("Cannot update stats","FAIL")
 		
-
+		log.headPut("Finished cron-dbpedia","SUCCESS")
 	else:
 		#No change exit silently
 		sys.exit(0)
@@ -85,4 +94,5 @@ def init():
 
 if __name__=="__main__":
 	#being executed
+	log.headPut("Started cron-dbpedia","SUCCESS")
 	init()

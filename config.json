@@ -1,15 +1,16 @@
 {
+	"log_file":"cron-dbpedia.log",
+	"head_log_file":"../cron.log",
+	"mongo_url":"mongodb://192.168.101.5:27017/",
+	"mongo_db":"cron-dbpedia",
 	"base_url":"http://downloads.dbpedia.org/current/core-i18n/en/",
 	"tracking_files":[
-		"article-categories_en.nt.bz2",
+		"homepages_en.nt.bz2",
 		"disambiguations_en.nt.bz2",
 		"external-links_en.nt.bz2",
 		"homepages_en.nt.bz2",
 		"images_en.nt.bz2",
-		"infobox-properties_en.nt.bz2",
-		"instance-types_en.nt.bz2",
-		"redirects_en.nt.bz2",
-		"short-abstracts_en.nt.bz2"
+		"short-abstracts_en.ttl.bz2"
 	]
 
 	
