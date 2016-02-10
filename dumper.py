@@ -77,7 +77,7 @@ def insert(col,first,second,third):
 		if first not in data:
 			data[first]={}
 			data[first]["box"]={}
-		data[first]["box"][second.replace("http://dbpedia.org/property/","")]=third.replace("http://dbpedia.org/property/","")		
+		data[first]["box"][second.replace("http://dbpedia.org/property/","").replace(".","#dot#")]=third.replace("http://dbpedia.org/property/","").replace(".","#dot#")		
 	elif col=="short-abstracts_en":
 		collection = db[col]
 		if col not in dic:
