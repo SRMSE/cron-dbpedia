@@ -19,7 +19,7 @@ def insert(col,first,second,third):
 			collection.drop() 
 			collection.create_index([('search', "text")], default_language='english')
 			dic[col]=True
-		collection.insert({"wiki":first,"website":third,"search":searchKey(first)},w=0)
+		collection.insert({"_id":first,"website":third,"search":searchKey(first)},w=0)
 	elif col=="disambiguations_en":
 		collection = db[col]
 		if col not in dic:
@@ -28,7 +28,7 @@ def insert(col,first,second,third):
 			dic[col]=True
 			last_first=first
 		if first!=last_first:
-			collection.insert({"wiki":last_first,"to":data[last_first]["to"],"search":searchKey(last_first)},w=0)
+			collection.insert({"_id":last_first,"to":data[last_first]["to"],"search":searchKey(last_first)},w=0)
 			last_first=first
 		if first not in data:
 			data[first]={}
@@ -42,13 +42,13 @@ def insert(col,first,second,third):
 			dic[col]=True
 			last_first=first
 		if first!=last_first:
-			collection.insert({"wiki":last_first,"to":data[last_first]["to"],"search":searchKey(last_first)},w=0)
+			collection.insert({"_id":last_first,"to":data[last_first]["to"],"search":searchKey(last_first)},w=0)
 			last_first=first
 		if first not in data:
 			data[first]={}
 			data[first]["to"]=[]
 		data[first]["to"].append(third)
-	elif col=="images_en.nt":
+	elif col=="images_en":
 		collection = db[col]
 		if col not in dic:
 			collection.drop() 
@@ -56,19 +56,33 @@ def insert(col,first,second,third):
 			dic[col]=True
 			last_first=first
 		if first!=last_first:
-			collection.insert({"wiki":last_first,"images":data[last_first]["to"],"search":searchKey(last_first)},w=0)
+			collection.insert({"_id":last_first,"images":data[last_first]["to"],"search":searchKey(last_first)},w=0)
 			last_first=first
 		if first not in data:
 			data[first]={}
 			data[first]["to"]=[]
 		data[first]["to"].append(third)
+	elif col=="infobox-properties_en":
+		collection = db[col]
+		if col not in dic:
+			collection.drop() 
+			collection.create_index([('search', "text")], default_language='english')
+			dic[col]=True
+			last_first=first
+		if first!=last_first:
+			collection.insert({"_id":last_first,"box":data[last_first]["box"],"search":searchKey(last_first)},w=0)
+			last_first=first
+		if first not in data:
+			data[first]={}
+			data[first]["box"]={}
+		data[first]["box"][second.replace("http://dbpedia.org/property/","")]=third.replace("http://dbpedia.org/property/","")		
 	elif col=="short-abstracts_en":
 		collection = db[col]
 		if col not in dic:
 			collection.drop() 
 			collection.create_index([('search', "text")], default_language='english')
 			dic[col]=True
-		collection.insert({"wiki":first,"summary":third,"$set":{"search":searchKey(first)}},w=0)
+		collection.insert({"_id":first,"summary":third,"$set":{"search":searchKey(first)}},w=0)
 	else:
 		collection = db[col]
-		collection.insert({"first":first,"second":second,"third":third},w=0)
+		collection.insert({"_id":first,"second":second,"third":third},w=0)
