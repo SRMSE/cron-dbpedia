@@ -4,6 +4,8 @@ from bs4 import BeautifulSoup as bs
 import os
 from urllib2 import urlopen, URLError, HTTPError
 import ntriples as nt
+os.system("rm *.nt")
+os.system("rm *.bz2")
 def dlfile(url):
     # Open the url
     try:
