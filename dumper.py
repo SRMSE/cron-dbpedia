@@ -1,5 +1,5 @@
 from pymongo import MongoClient
-import config
+import config,urllib2
 client = MongoClient(config.getConfig("mongo_url"))
 db = client[config.getConfig("mongo_db")]
 dic={}
@@ -10,6 +10,9 @@ def searchKey(key):
 	return key
 def insert(col,first,second,third):
 	global data,dic,last_first
+	first=urllib2.unquote(first)
+	second=urllib2.unquote(second)
+	third=urllib2.unquote(third)
 	if col=="homepages_en":
 		collection = db[col]
 		if col not in dic:
