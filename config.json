@@ -5,6 +5,11 @@
 	"mongo_db":"cron-dbpedia",
 	"base_url":"http://downloads.dbpedia.org/current/core-i18n/en/",
 	"tracking_files":[
+		"homepages_en.nt.bz2",
+		"disambiguations_en.nt.bz2",
+		"external-links_en.nt.bz2",
+		"images_en.nt.bz2",
+		"short-abstracts_en.ttl.bz2",
 		"infobox-properties_en.nt.bz2"
 	]
 
