@@ -5,6 +5,8 @@ db = client[config.getConfig("mongo_db")]
 dic={}
 data={}
 last_first=None
+def createKey(key):
+	return key.replace(".","#dot#")
 def searchKey(key):
 	key=key.replace("_"," ").replace("http://dbpedia.org/resource/","").replace("(","").replace(")","").lower()
 	return key
@@ -19,7 +21,7 @@ def insert(col,first,second,third):
 			collection.drop() 
 			collection.create_index([('search', "text")], default_language='english')
 			dic[col]=True
-		collection.insert({"_id":first,"website":third,"search":searchKey(first)},w=0)
+		collection.insert({"_id":createKey(first),"website":third,"search":searchKey(first)},w=0)
 	elif col=="disambiguations_en":
 		collection = db[col]
 		if col not in dic:
@@ -28,7 +30,7 @@ def insert(col,first,second,third):
 			dic[col]=True
 			last_first=first
 		if first!=last_first:
-			collection.insert({"_id":last_first,"to":data[last_first]["to"],"search":searchKey(last_first)},w=0)
+			collection.insert({"_id":createKey(last_first),"to":data[last_first]["to"],"search":searchKey(last_first)},w=0)
 			last_first=first
 		if first not in data:
 			data[first]={}
@@ -42,7 +44,7 @@ def insert(col,first,second,third):
 			dic[col]=True
 			last_first=first
 		if first!=last_first:
-			collection.insert({"_id":last_first,"to":data[last_first]["to"],"search":searchKey(last_first)},w=0)
+			collection.insert({"_id":createKey(last_first),"to":data[last_first]["to"],"search":searchKey(last_first)},w=0)
 			last_first=first
 		if first not in data:
 			data[first]={}
@@ -56,7 +58,7 @@ def insert(col,first,second,third):
 			dic[col]=True
 			last_first=first
 		if first!=last_first:
-			collection.insert({"_id":last_first,"images":data[last_first]["to"],"search":searchKey(last_first)},w=0)
+			collection.insert({"_id":createKey(last_first),"images":data[last_first]["to"],"search":searchKey(last_first)},w=0)
 			last_first=first
 		if first not in data:
 			data[first]={}
@@ -70,7 +72,7 @@ def insert(col,first,second,third):
 			dic[col]=True
 			last_first=first
 		if first!=last_first:
-			collection.insert({"_id":last_first,"box":data[last_first]["box"],"search":searchKey(last_first)},w=0)
+			collection.insert({"_id":createKey(last_first),"box":data[last_first]["box"],"search":searchKey(last_first)},w=0)
 			last_first=first
 		if first not in data:
 			data[first]={}
@@ -82,7 +84,7 @@ def insert(col,first,second,third):
 			collection.drop() 
 			collection.create_index([('search', "text")], default_language='english')
 			dic[col]=True
-		collection.insert({"_id":first,"summary":third,"$set":{"search":searchKey(first)}},w=0)
+		collection.insert({"_id":createKey(first),"summary":third,"$set":{"search":searchKey(first)}},w=0)
 	else:
 		collection = db[col]
-		collection.insert({"_id":first,"second":second,"third":third},w=0)
+		collection.insert({createKey("_id":first),"second":second,"third":third},w=0)
