@@ -87,4 +87,4 @@ def insert(col,first,second,third):
 		collection.insert({"_id":createKey(first),"summary":third,"$set":{"search":searchKey(first)}},w=0)
 	else:
 		collection = db[col]
-		collection.insert({createKey("_id":first),"second":second,"third":third},w=0)
+		collection.insert({"_id":createKey(first),"second":second,"third":third},w=0)
