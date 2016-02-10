@@ -19,7 +19,6 @@ def dlfile(url):
         log.put("Starting decompressing","INFO")
         os.system("bunzip2 -d "+os.path.basename(url))
         log.put("File decompressed "+url,"SUCCESS")
-        print "yoo"
     #handle errors
     except HTTPError, e:
         print "HTTP Error:", e.code, url
