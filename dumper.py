@@ -84,7 +84,7 @@ def insert(col,first,second,third):
 			collection.drop() 
 			collection.create_index([('search', "text")], default_language='english')
 			dic[col]=True
-		collection.insert({"_id":createKey(first),"summary":third,"$set":{"search":searchKey(first)}},w=0)
+		collection.insert({"_id":createKey(first),"summary":third,"search":searchKey(first)},w=0)
 	else:
 		collection = db[col]
 		collection.insert({"_id":createKey(first),"second":second,"third":third},w=0)

@@ -6,6 +6,7 @@ from urllib2 import urlopen, URLError, HTTPError
 import ntriples as nt
 os.system("rm *.nt")
 os.system("rm *.bz2")
+os.system("rm *.ttl")
 def dlfile(url):
     # Open the url
     try:
@@ -45,7 +46,8 @@ def updateFiles(dic):
 				log.put("Parsed "+config.getConfig("base_url")+l,"SUCCESS")
 	log.put("Tracked files updated","SUCCESS")
 	log.put("Deleting all files from cache","INFO")
-	os.system("rm -rf *.nt")
+	os.system("rm *.nt")
+	os.system("rm *.ttl")
 	log.put("Files deleted from cache","SUCCESS")
 def parseIndex(data):
 	log.put("Start parsing index","INFO")
