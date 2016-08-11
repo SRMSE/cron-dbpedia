@@ -37,7 +37,7 @@ def updateFiles(dic):
 				#file changed
 				dlfile(config.getConfig("base_url")+l)
 				log.put("Parsing "+config.getConfig("base_url")+l,"INFO")
-				nt.parseURI(l.replace(".bz2",""),l.split(".")[0])
+				nt.parseURI(l.replace(".bz2",""),l.split(".")[0],l.replace(".bz2",""),l.split(".")[0])
 				log.put("Parsed "+config.getConfig("base_url")+l,"SUCCESS")
 		except KeyError:
 				dlfile(config.getConfig("base_url")+l)

@@ -1,6 +1,9 @@
+f
 *.log
 *.pyc
 *.nt
 *.bz2
 *.ttl
 *~
+dump.json
+result.json

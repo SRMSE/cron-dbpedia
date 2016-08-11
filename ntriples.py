@@ -221,13 +221,20 @@ class NTriplesParser(object):
       return False
 
 def parseURI(uri,collection): 
+   print uri,collection
    global col
    col=collection
    import urllib
    parser = NTriplesParser()
+   print "Parser over"
    u = urllib.urlopen(uri)
+   print "u over"
    sink = parser.parse(u)
+   print "sink over"
    u.close()
+   if "redirects" in collection:
+   	#dump big dict
+   	dumper.dumpRedirects()
    # for triple in sink: 
    #    print triple
    print 'Length of input:', sink.length
